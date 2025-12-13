@@ -1,0 +1,14 @@
+C:\Users\PC\My Files\Mastering_API_Course\AdvancedCsharp\bin\Debug\net10.0\AdvancedCsharp.exe
+C:\Users\PC\My Files\Mastering_API_Course\AdvancedCsharp\bin\Debug\net10.0\AdvancedCsharp.deps.json
+C:\Users\PC\My Files\Mastering_API_Course\AdvancedCsharp\bin\Debug\net10.0\AdvancedCsharp.runtimeconfig.json
+C:\Users\PC\My Files\Mastering_API_Course\AdvancedCsharp\bin\Debug\net10.0\AdvancedCsharp.dll
+C:\Users\PC\My Files\Mastering_API_Course\AdvancedCsharp\bin\Debug\net10.0\AdvancedCsharp.pdb
+C:\Users\PC\My Files\Mastering_API_Course\AdvancedCsharp\obj\Debug\net10.0\AdvancedCsharp.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\PC\My Files\Mastering_API_Course\AdvancedCsharp\obj\Debug\net10.0\AdvancedCsharp.AssemblyInfoInputs.cache
+C:\Users\PC\My Files\Mastering_API_Course\AdvancedCsharp\obj\Debug\net10.0\AdvancedCsharp.AssemblyInfo.cs
+C:\Users\PC\My Files\Mastering_API_Course\AdvancedCsharp\obj\Debug\net10.0\AdvancedCsharp.csproj.CoreCompileInputs.cache
+C:\Users\PC\My Files\Mastering_API_Course\AdvancedCsharp\obj\Debug\net10.0\AdvancedCsharp.dll
+C:\Users\PC\My Files\Mastering_API_Course\AdvancedCsharp\obj\Debug\net10.0\refint\AdvancedCsharp.dll
+C:\Users\PC\My Files\Mastering_API_Course\AdvancedCsharp\obj\Debug\net10.0\AdvancedCsharp.pdb
+C:\Users\PC\My Files\Mastering_API_Course\AdvancedCsharp\obj\Debug\net10.0\AdvancedCsharp.genruntimeconfig.cache
+C:\Users\PC\My Files\Mastering_API_Course\AdvancedCsharp\obj\Debug\net10.0\ref\AdvancedCsharp.dll
