@@ -1,42 +1,68 @@
-﻿namespace AdvancedCsharp;
+﻿using System.Reflection.Metadata.Ecma335;
 
-// Delegate : a reference to a function, the delegate must have the same the signature as the methods 
+namespace AdvancedCsharp;
+
 internal class Program
 {
     static void Main(string[] args)
     {
-        // main to consume the Delegate 
+        Stock s = new Stock("Bateekh");
+        s.Price = 100;
+        s.OnPriceChanged += Stock_OnPriceChanged;
 
-        // Old 
-        Calculate(5, 7, delegate (int num1, int num2) { return num1 * num2; });
-
-        // Lampda expression -> preferred and 
-        Calculate(5, 7, (num1, num2) => num1 * num2);
+        s.ChangeStockPriceBy(0.05m);
+        s.ChangeStockPriceBy(-0.02m);
+        s.ChangeStockPriceBy(0.00m);
 
 
+
+        Console.ReadKey();
     }
-
-    // consumer for the CalculateDelegate 
-    static void Calculate(int num1, int num2, CalculateDelegate dlg)
+    private static void Stock_OnPriceChanged(Stock stock, decimal oldPrice)
     {
-        // calculate value 
-        int res = dlg(num1, num2);
-        // print result 
-        System.Console.WriteLine(res);
+        if (stock.Price > oldPrice)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+        }
+        else if (stock.Price < oldPrice)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+        }
+        else
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+        }
+        System.Console.WriteLine($"{stock.Name} , {stock.Price}");
+    }
+}
+
+delegate void StockPriceChangeHandler(Stock stock, decimal oldPrice);
+
+
+class Stock
+{
+    private decimal _price;
+    private string _name;
+
+    public event StockPriceChangeHandler OnPriceChanged;
+
+    public string Name => _name;
+    public decimal Price { get => this._price; set => this._price = value; }
+
+    public Stock(string name)
+    {
+        this._name = name;
     }
 
-    // Delegate 
-    delegate int CalculateDelegate(int num1, int num2);
 
-
-    // methods to point at using the CalculateDelegate
-    static int Add(int num1, int num2) => num1 + num2;
-
-    static int Subtract(int num1, int num2) => num1 - num2;
-
-    static int Multiply(int num1, int num2) => num1 * num2;
-
-    static int Divide(int num1, int num2) => num1 / num2;
-
+    public void ChangeStockPriceBy(decimal percent)
+    {
+        decimal oldPrice = Price;
+        Price += Price * (percent / 100);
+        if (OnPriceChanged != null)
+        {
+            OnPriceChanged(this, oldPrice);
+        }
+    }
 }
 
