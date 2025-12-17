@@ -7,23 +7,23 @@ internal class Program
 {
     static void Main(string[] args)
     {
-        // System.Console.WriteLine($"Process Id :{Process.GetCurrentProcess().Id}");
-        // System.Console.WriteLine($"Thread Id : {Thread.CurrentThread.ManagedThreadId}");
-        // System.Console.WriteLine($"Processor Id : {Thread.GetCurrentProcessorId()}");
-
-        var wallet = new Wallet("Jawad", 30);
-        wallet.RunRandomTransactions();
-        System.Console.WriteLine("------------------------------------------------");
-        System.Console.WriteLine(wallet);
 
 
-        wallet.RunRandomTransactions();
-        System.Console.WriteLine("------------------------------------------------");
-        System.Console.WriteLine(wallet);
+        // the default for a thread is to be foreground 
+        Thread.CurrentThread.Name = "Main Thread";
+        System.Console.WriteLine(Thread.CurrentThread.Name);
+        Console.WriteLine($"BackGround Thread : {Thread.CurrentThread.IsBackground}");
+
+        var wallet = new Wallet("Jawad",80);
+
+        Thread t1 = new Thread(wallet.RunRandomTransactions);
+        t1.Name = "T1";
+        Console.WriteLine(t1.IsBackground);
+
 
         Console.ReadKey();
     }
-
+}
 
     class Wallet
     {
@@ -36,8 +36,18 @@ internal class Program
             this.Bitcoin = Bitcoin;
         }
 
-        public void Debit(int amount) => Bitcoin -= amount;
-        public void Credit(int amount) => Bitcoin += amount;
+        public void Debit(int amount)
+        {
+            Thread.Sleep(1000);
+            Bitcoin -= amount;
+            System.Console.WriteLine($"Thread Id :{Thread.CurrentThread.ManagedThreadId} , Processor Id :{Thread.GetCurrentProcessorId()}");
+        }
+        public void Credit(int amount)
+        {
+            Thread.Sleep(1000);
+            Bitcoin += amount;
+            System.Console.WriteLine($"Thread Id :{Thread.CurrentThread.ManagedThreadId} , Processor Id :{Thread.GetCurrentProcessorId()}");
+        }
 
         public void RunRandomTransactions()
         {
@@ -51,8 +61,6 @@ internal class Program
 
                 else
                     Credit(absValue);
-
-                System.Console.WriteLine($"Thread Id :{Thread.CurrentThread.ManagedThreadId} , Processor Id :{Thread.GetCurrentProcessorId()}");
             }
         }
 
@@ -63,4 +71,3 @@ internal class Program
 
     }
 
-}
