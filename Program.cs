@@ -7,7 +7,7 @@ internal class Program
 {
     static void Main(string[] args)
     {
-        // Deadlock 
+        // Deadlock Solution : using monitor class 
 
         var wallet1 = new Wallet("jawad",100);
         var wallet2 = new Wallet("reem",50);
@@ -121,12 +121,36 @@ class TransferManager
             Console.WriteLine($"{Thread.CurrentThread.Name} lock aquired ... {from}");
             Thread.Sleep(1000);
             Console.WriteLine($"{Thread.CurrentThread.Name} trying to lock ... {to}");
-            lock(to)
+
+            // Critical Section
+            /*lock(to)
             {
                 from.Debit(amountToTransfer);
                 to.Credit(amountToTransfer);
-            }
+            }*/
 
+            if (Monitor.TryEnter(to,1000))
+            {
+                Console.WriteLine($"{Thread.CurrentThread.Name}  lock aquired ... {to}");
+
+                try
+                {
+                    from.Debit(amountToTransfer);
+                    to.Credit(amountToTransfer);
+                }
+                catch(Exception ex)
+                {
+                    Console.WriteLine($"{ex.Message}");
+                }
+                finally
+                {
+                    Monitor.Exit(to);
+                }
+            }
+            else
+            {
+                Console.WriteLine($"{Thread.CurrentThread.Name} unable to aquire lock on ... {to}");
+            }
         }
     }
 }
