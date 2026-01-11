@@ -21,10 +21,25 @@ internal class Program
 
         Console.WriteLine("\n After Transaction");
         Console.WriteLine("\n----------------------");
-        var transferManager = new TransferManager(wallet1,wallet2,50);
-        transferManager.Transfer();
-        Console.WriteLine(wallet1 + " , " + wallet2);
+        var transferManager1 = new TransferManager(wallet1,wallet2,50);
+        var transferManager2 = new TransferManager(wallet2,wallet1,30);
 
+        Thread t1 = new Thread(transferManager1.Transfer);
+        t1.Name = "T1";
+        Thread t2 = new Thread(transferManager2.Transfer);
+        t2.Name = "T2";
+
+        t1.Start();
+        t2.Start();
+
+
+        t1.Join();
+        t2.Join();
+
+
+
+
+        Console.WriteLine(wallet1 + " , " + wallet2);
         Console.ReadKey(true);
     }
 }
