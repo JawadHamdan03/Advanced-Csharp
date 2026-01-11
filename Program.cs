@@ -7,24 +7,25 @@ internal class Program
 {
     static void Main(string[] args)
     {
-        // Race Condition
-        // both the threads t1 and t2 race to execute Debit() 
-        // we use lock to prevent race condition
+        // Deadlock 
 
-        var wallet = new Wallet("jawad",50);
+        var wallet1 = new Wallet("jawad",100);
+        var wallet2 = new Wallet("reem",50);
 
-        Thread t1 = new Thread(()=>wallet.Debit(40));
-        Thread t2 = new Thread(()=>wallet.Debit(40));
+        Console.WriteLine("\n Before Transaction");
+        Console.WriteLine("\n----------------------");
+        Console.ReadKey(true);
+        Console.WriteLine(wallet1+" , "+ wallet2);
+        Console.WriteLine();
+        Console.WriteLine();
 
-        t1.Start();
-        t2.Start();
+        Console.WriteLine("\n After Transaction");
+        Console.WriteLine("\n----------------------");
+        var transferManager = new TransferManager(wallet1,wallet2,50);
+        transferManager.Transfer();
+        Console.WriteLine(wallet1 + " , " + wallet2);
 
-
-        t1.Join();
-        t2.Join();
-
-        Console.WriteLine(wallet);
-        Console.ReadKey();
+        Console.ReadKey(true);
     }
 }
 
@@ -79,8 +80,38 @@ class Wallet
 
     public override string ToString()
     {
-        return $"Name :{Name} , Bitcoin : {Bitcoin}";
+        return $"[Name :{Name} , Bitcoin : {Bitcoin}]";
     }
 
 }
 
+class TransferManager
+{
+    private Wallet from;
+    private Wallet to;
+    private int amountToTransfer;
+
+    public TransferManager(Wallet from, Wallet to, int amount)
+    {
+        this.from = from;
+        this.to = to;
+        this.amountToTransfer = amount;
+    }
+
+    public void Transfer()
+    {
+        Console.WriteLine($"{Thread.CurrentThread.Name} trying to lock ... {from}");
+        lock(from)
+        {
+            Console.WriteLine($"{Thread.CurrentThread.Name} lock aquired ... {from}");
+            Thread.Sleep(1000);
+            Console.WriteLine($"{Thread.CurrentThread.Name} trying to lock ... {to}");
+            lock(to)
+            {
+                from.Debit(amountToTransfer);
+                to.Credit(amountToTransfer);
+            }
+
+        }
+    }
+}
