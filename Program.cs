@@ -7,10 +7,10 @@ internal class Program
 {
     static void Main(string[] args)
     {
-        // Deadlock Solution : using monitor class 
+        // Deadlock Solution : using pre ordering 
 
-        var wallet1 = new Wallet("jawad",100);
-        var wallet2 = new Wallet("reem",50);
+        var wallet1 = new Wallet(1,"jawad",100);
+        var wallet2 = new Wallet(2,"reem",50);
 
         Console.WriteLine("\n Before Transaction");
         Console.WriteLine("\n----------------------");
@@ -48,12 +48,13 @@ class Wallet
 {
     private readonly object _bitcoinsLock= new object();
 
-
+    public int Id { get; set; }
     public string Name { get; private set; }
     public int Bitcoin { get; private set; }
 
-    public Wallet(string name, int Bitcoin)
+    public Wallet(int id,string name, int Bitcoin)
     {
+        this.Id = id;
         this.Name = name;
         this.Bitcoin = Bitcoin;
     }
@@ -115,42 +116,25 @@ class TransferManager
 
     public void Transfer()
     {
+        // to implement ordering 
+        var lock1 = from.Id < to.Id ? from : to;
+        var lock2 = from.Id < to.Id ? to : from;
+
         Console.WriteLine($"{Thread.CurrentThread.Name} trying to lock ... {from}");
-        lock(from)
+        lock(lock1)
         {
             Console.WriteLine($"{Thread.CurrentThread.Name} lock aquired ... {from}");
             Thread.Sleep(1000);
             Console.WriteLine($"{Thread.CurrentThread.Name} trying to lock ... {to}");
 
             // Critical Section
-            /*lock(to)
+            lock(lock2)
             {
                 from.Debit(amountToTransfer);
                 to.Credit(amountToTransfer);
-            }*/
-
-            if (Monitor.TryEnter(to,1000))
-            {
-                Console.WriteLine($"{Thread.CurrentThread.Name}  lock aquired ... {to}");
-
-                try
-                {
-                    from.Debit(amountToTransfer);
-                    to.Credit(amountToTransfer);
-                }
-                catch(Exception ex)
-                {
-                    Console.WriteLine($"{ex.Message}");
-                }
-                finally
-                {
-                    Monitor.Exit(to);
-                }
             }
-            else
-            {
-                Console.WriteLine($"{Thread.CurrentThread.Name} unable to aquire lock on ... {to}");
-            }
+
+           
         }
     }
 }
